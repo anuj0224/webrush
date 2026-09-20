@@ -1,0 +1,156 @@
+import { Link, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Search, X, ArrowUpRight } from "lucide-react";
+import { navItems, receipts } from "@/lib/life-data";
+import { Button, SearchField } from "@/components/ui";
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [q, setQ] = useState("");
+
+  useEffect(() => {
+    const fn = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+      if (e.key === "Escape") setSearchOpen(false);
+    };
+    addEventListener("keydown", fn);
+    return () => removeEventListener("keydown", fn);
+  }, []);
+
+  const results = q.trim()
+    ? receipts
+        .filter(r =>
+          `${r.title} ${r.location} ${r.detail} ${r.category} ${r.dataset} ${r.rawArtist || ""}`
+            .toLowerCase()
+            .includes(q.toLowerCase())
+        )
+        .slice(0, 10)
+    : [];
+
+  return (
+    <div className="noise min-h-screen bg-background text-foreground">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-56 flex-col border-r border-border bg-background/90 px-5 py-7 backdrop-blur-xl lg:flex">
+        <Link to="/" className="mb-14">
+          <span className="display text-2xl">Life, In Receipts</span>
+          <span className="mt-1 block text-[9px] uppercase tracking-[.22em] text-muted-foreground">
+            Personal archive · 2013—2024
+          </span>
+        </Link>
+        <nav className="space-y-1">
+          {navItems.map(n => (
+            <NavLink
+              key={n.to}
+              to={n.to}
+              end={n.to === "/"}
+              className={({ isActive }) =>
+                `group flex items-center gap-3 rounded-md px-3 py-2.5 text-xs transition hover:bg-secondary hover:text-foreground ${
+                  isActive ? "bg-secondary text-foreground" : "text-muted-foreground"
+                }`
+              }
+            >
+              <span className="w-5 text-center text-sm">{n.icon}</span>
+              {n.label}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="mt-auto">
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="flex w-full items-center justify-between rounded-md border border-border bg-surface px-3 py-3 text-xs text-muted-foreground hover:text-foreground"
+          >
+            <span className="flex items-center gap-2">
+              <Search className="h-3.5 w-3.5" />
+              Search archive
+            </span>
+            <kbd className="rounded border border-border px-1.5 py-0.5 text-[9px]">⌘K</kbd>
+          </button>
+          <div className="mt-5 border-t border-border pt-5 text-[10px] uppercase tracking-[.14em] text-muted-foreground">
+            <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-messages category-dot" />
+            3 datasets connected
+          </div>
+        </div>
+      </aside>
+
+      <main className="min-h-screen pb-24 lg:ml-56 lg:pb-0">
+        <div className="mx-auto max-w-[1500px] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">{children}</div>
+      </main>
+
+      <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-6 border-t border-border bg-background/95 px-1 py-2 backdrop-blur-xl lg:hidden">
+        {navItems.map(n => (
+          <NavLink
+            key={n.to}
+            to={n.to}
+            end={n.to === "/"}
+            className={({ isActive }) =>
+              `flex min-w-0 flex-col items-center gap-1 py-1 text-[9px] ${
+                isActive ? "text-primary" : "text-muted-foreground"
+              }`
+            }
+          >
+            <span className="text-base">{n.icon}</span>
+            <span className="truncate">{n.label}</span>
+          </NavLink>
+        ))}
+      </nav>
+
+      {searchOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-background/85 p-4 backdrop-blur-xl sm:p-10"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Search archive"
+        >
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-6 flex items-center justify-between">
+              <p className="eyebrow">Search all three datasets</p>
+              <Button variant="icon" aria-label="Close search" onClick={() => setSearchOpen(false)}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <SearchField
+              autoFocus
+              value={q}
+              onChange={e => setQ(e.target.value)}
+              placeholder="Try “Beatles”, “Food”, “Uttarakhand”, or a track…"
+              className="h-16 px-5 text-lg"
+            />
+            <div className="mt-6 space-y-2">
+              {q && !results.length && (
+                <div className="py-20 text-center text-sm text-muted-foreground">
+                  No moments found. Try an artist, merchant, place, or category.
+                </div>
+              )}
+              {results.map(r => (
+                <Link
+                  key={r.id}
+                  to="/receipts"
+                  onClick={() => setSearchOpen(false)}
+                  className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 rounded-md border border-transparent p-4 hover:border-border hover:bg-surface"
+                >
+                  <span className={`grid h-10 w-10 place-items-center rounded-full bg-secondary text-${r.tone}`}>
+                    {r.icon}
+                  </span>
+                  <span className="min-w-0">
+                    <strong className="block truncate text-sm">{r.title}</strong>
+                    <small className="text-muted-foreground">
+                      {r.category} · {r.date} · {r.location}
+                    </small>
+                  </span>
+                  <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
+                </Link>
+              ))}
+            </div>
+            {!q && (
+              <p className="mt-8 text-center text-sm text-muted-foreground">
+                Search track names, artists, merchants, amounts, categories, and locations.
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
