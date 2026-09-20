@@ -1,9 +1,81 @@
 import { activity, months, type Receipt } from "@/lib/life-data";
 import { cn } from "@/lib/utils";
 
-export function LifePulse({compact=false,onSelect}:{compact?:boolean;onSelect?:(i:number)=>void}){
- const points=activity.map((v,i)=>`${i*(100/(activity.length-1))},${92-v*.7}`).join(" ");
- return <div className={cn("relative overflow-hidden",compact?"h-48":"h-[320px]")}><div className="absolute inset-x-0 top-2 flex justify-between"><span className="eyebrow">Activity flow · 2025</span><span className="text-xs text-muted-foreground">324 connected moments</span></div><svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full overflow-visible" aria-label="Activity by month"><defs><linearGradient id="pulse" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="var(--primary)" stopOpacity=".32"/><stop offset="1" stopColor="var(--primary)" stopOpacity="0"/></linearGradient></defs><path d={`M0,100 L${points} L100,100 Z`} fill="url(#pulse)"/><polyline points={points} fill="none" stroke="var(--primary)" strokeWidth=".8" vectorEffect="non-scaling-stroke" className="flow-line"/>{activity.map((v,i)=><circle key={i} cx={i*(100/(activity.length-1))} cy={92-v*.7} r={i===5?1.8:1} fill={i===5?"var(--primary)":"var(--background)"} stroke="var(--primary)" strokeWidth=".5" vectorEffect="non-scaling-stroke" onClick={()=>onSelect?.(i)} className="cursor-pointer"/>)}</svg><div className="absolute inset-x-0 bottom-0 flex justify-between">{months.map((m,i)=><button onClick={()=>onSelect?.(i)} className="text-[9px] text-muted-foreground hover:text-foreground" key={m}>{m}</button>)}</div></div>
+export function LifePulse({ compact = false, onSelect }: { compact?: boolean; onSelect?: (i: number) => void }) {
+  const points = activity.map((v, i) => `${i * (100 / (activity.length - 1))},${92 - v * 0.7}`).join(" ");
+  return (
+    <div className={cn("relative overflow-hidden", compact ? "h-48" : "h-[320px]")}>
+      <div className="absolute inset-x-0 top-2 flex justify-between">
+        <span className="eyebrow">Activity flow · Monthly distribution</span>
+        <span className="text-xs text-muted-foreground">162,588 connected moments</span>
+      </div>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full overflow-visible" aria-label="Activity by month">
+        <defs>
+          <linearGradient id="pulse" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stopColor="var(--primary)" stopOpacity=".32" />
+            <stop offset="1" stopColor="var(--primary)" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d={`M0,100 L${points} L100,100 Z`} fill="url(#pulse)" />
+        <polyline points={points} fill="none" stroke="var(--primary)" strokeWidth=".8" vectorEffect="non-scaling-stroke" className="flow-line" />
+        {activity.map((v, i) => (
+          <circle
+            key={i}
+            cx={i * (100 / (activity.length - 1))}
+            cy={92 - v * 0.7}
+            r={i === 5 ? 1.8 : 1}
+            fill={i === 5 ? "var(--primary)" : "var(--background)"}
+            stroke="var(--primary)"
+            strokeWidth=".5"
+            vectorEffect="non-scaling-stroke"
+            onClick={() => onSelect?.(i)}
+            className="cursor-pointer"
+          />
+        ))}
+      </svg>
+      <div className="absolute inset-x-0 bottom-0 flex justify-between">
+        {months.map((m, i) => (
+          <button onClick={() => onSelect?.(i)} className="text-[9px] text-muted-foreground hover:text-foreground" key={m}>
+            {m}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }
-export function MiniSignal({tone="primary"}:{tone?:string}){return <div className="flex h-12 items-end gap-1">{[3,7,4,10,6,13,8,15,5,11,7,14].map((h,i)=><span key={i} className={cn("w-1 rounded-t-sm opacity-70",`bg-${tone}`)} style={{height:h*2}}/>)}</div>}
-export function ReceiptArtifact({receipt,onClick}:{receipt:Receipt;onClick?:()=>void}){return <button onClick={onClick} className="receipt-edge group relative flex min-h-64 w-full flex-col overflow-hidden border border-border bg-card p-5 text-left transition duration-300 hover:-translate-y-1 hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><div className="mb-8 flex items-start justify-between"><span className={cn("grid h-9 w-9 place-items-center rounded-full border border-current",`text-${receipt.tone}`)}>{receipt.icon}</span><span className="font-mono text-[10px] text-muted-foreground">{receipt.id}</span></div><p className="eyebrow">{receipt.category}</p><h3 className="mt-2 text-lg font-semibold leading-snug text-foreground">{receipt.title}</h3><p className="mt-2 text-xs leading-5 text-muted-foreground">{receipt.detail}</p><div className="mt-auto border-t border-dashed border-border pt-4"><div className="flex justify-between text-[10px] text-muted-foreground"><span>{receipt.date}</span><span>{receipt.time}</span></div><p className="mt-2 truncate text-xs text-foreground">{receipt.location}</p></div></button>}
+
+export function MiniSignal({ tone = "primary" }: { tone?: string }) {
+  return (
+    <div className="flex h-12 items-end gap-1">
+      {[3, 7, 4, 10, 6, 13, 8, 15, 5, 11, 7, 14].map((h, i) => (
+        <span key={i} className={cn("w-1 rounded-t-sm opacity-70", `bg-${tone}`)} style={{ height: h * 2 }} />
+      ))}
+    </div>
+  );
+}
+
+export function ReceiptArtifact({ receipt, onClick }: { receipt: Receipt; onClick?: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="receipt-edge group relative flex min-h-64 w-full flex-col overflow-hidden border border-border bg-card p-5 text-left transition duration-300 hover:-translate-y-1 hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <div className="mb-8 flex items-start justify-between">
+        <span className={cn("grid h-9 w-9 place-items-center rounded-full border border-current", `text-${receipt.tone}`)}>
+          {receipt.icon}
+        </span>
+        <span className="font-mono text-[10px] text-muted-foreground">{receipt.id}</span>
+      </div>
+      <p className="eyebrow">{receipt.category}</p>
+      <h3 className="mt-2 text-lg font-semibold leading-snug text-foreground">{receipt.title}</h3>
+      <p className="mt-2 text-xs leading-5 text-muted-foreground">{receipt.detail}</p>
+      <div className="mt-auto border-t border-dashed border-border pt-4">
+        <div className="flex justify-between text-[10px] text-muted-foreground">
+          <span>{receipt.date}</span>
+          <span>{receipt.time}</span>
+        </div>
+        <p className="mt-2 truncate text-xs text-foreground">{receipt.location}</p>
+      </div>
+    </button>
+  );
+}

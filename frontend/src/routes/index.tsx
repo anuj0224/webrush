@@ -1,8 +1,99 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { stories } from "@/lib/life-data";
+import { stories, totals } from "@/lib/life-data";
 import { LifePulse } from "@/components/visuals";
 import { StoryCard } from "@/components/story-card";
-export const Route=createFileRoute("/")({head:()=>({meta:[{title:"Life, In Receipts — Your Digital Life, Connected"},{name:"description",content:"A cinematic archive revealing stories and connections across 324 digital moments."},{property:"og:title",content:"Life, In Receipts"},{property:"og:description",content:"Hundreds of tiny digital moments, connected into a larger story."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}),component:Overview});
-const totals=[["324","moments"],["42","places"],["1,284","songs"],["638","photos"],["91","purchases"],["27","events"],["2,106","messages"]];
-function Overview(){return <div><section className="relative min-h-[78vh] border-b border-border pb-10"><div className="flex items-center justify-between"><p className="eyebrow">Three archives · January—December 2025</p><span className="text-[10px] text-muted-foreground">Last indexed 8 min ago</span></div><div className="pt-[12vh]"><h1 className="display max-w-5xl text-6xl leading-[.84] sm:text-8xl lg:text-[8.5rem]">Your Life,<br/><em className="font-normal text-primary">In Receipts.</em></h1><p className="mt-8 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">Hundreds of tiny digital moments rarely mean much alone. Connected, they reveal routines, returns, and chapters hidden in plain sight.</p></div><div className="absolute bottom-8 right-0 hidden items-center gap-3 text-[10px] uppercase tracking-[.16em] text-muted-foreground sm:flex">Begin with the signal <ArrowDown className="h-4 w-4"/></div></section><section className="border-b border-border py-12"><div className="grid grid-cols-2 gap-y-8 sm:grid-cols-4 lg:grid-cols-7">{totals.map(([v,l],i)=><div key={l} className={i?"border-l border-border pl-5":""}><strong className="display block text-3xl text-warm">{v}</strong><span className="text-[10px] uppercase tracking-[.13em] text-muted-foreground">{l}</span></div>)}</div></section><section className="py-16"><LifePulse/><div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5"><p className="max-w-xl text-sm text-muted-foreground"><span className="text-foreground">June carried the strongest signal.</span> Music, searches, and messages clustered after 11 PM.</p><Link to="/journey" className="flex items-center gap-2 text-xs font-bold uppercase tracking-[.12em]">Open the journey <ArrowUpRight className="h-4 w-4"/></Link></div></section><section className="py-16"><div className="mb-10 flex items-end justify-between gap-6"><div><p className="eyebrow">Patterns shaped into chapters</p><h2 className="display mt-3 text-5xl sm:text-6xl">Stories we found</h2></div><Link to="/stories" className="hidden text-xs uppercase tracking-[.12em] text-muted-foreground sm:block">View all 12</Link></div><div className="grid gap-5 md:grid-cols-2">{stories.slice(0,3).map((s,i)=><StoryCard story={s} large={i===0} key={s.slug}/>)}</div></section><section className="grid gap-4 border-y border-border py-14 md:grid-cols-4">{[["01","Raw Data","Fragments arrive alone"],["02","Insights","Patterns begin to repeat"],["03","Connections","Moments find each other"],["04","Story","A chapter takes shape"]].map(([n,t,d])=><div className="border-l border-border pl-5" key={n}><span className="text-xs text-primary">{n}</span><h3 className="display mt-5 text-3xl">{t}</h3><p className="mt-2 text-xs text-muted-foreground">{d}</p></div>)}</section></div>}
+
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Life, In Receipts — Your Digital Life, Connected" },
+      { name: "description", content: "A cinematic archive revealing stories and connections across 162,588 digital moments." },
+      { property: "og:title", content: "Life, In Receipts" },
+      { property: "og:description", content: "Hundreds of thousands of digital moments, connected into a larger story." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" }
+    ]
+  }),
+  component: Overview
+});
+
+function Overview() {
+  return (
+    <div>
+      <section className="relative min-h-[78vh] border-b border-border pb-10">
+        <div className="flex items-center justify-between">
+          <p className="eyebrow">Three archives · July 2013 — December 2024</p>
+          <span className="text-[10px] text-muted-foreground">Indexed from local datasets</span>
+        </div>
+        <div className="pt-[12vh]">
+          <h1 className="display max-w-5xl text-6xl leading-[.84] sm:text-8xl lg:text-[8.5rem]">
+            Your Life,<br />
+            <em className="font-normal text-primary">In Receipts.</em>
+          </h1>
+          <p className="mt-8 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
+            Hundreds of thousands of digital moments rarely mean much alone. Connected, they reveal routines, returns, and chapters hidden in plain sight.
+          </p>
+        </div>
+        <div className="absolute bottom-8 right-0 hidden items-center gap-3 text-[10px] uppercase tracking-[.16em] text-muted-foreground sm:flex">
+          Begin with the signal <ArrowDown className="h-4 w-4" />
+        </div>
+      </section>
+
+      <section className="border-b border-border py-12">
+        <div className="grid grid-cols-2 gap-y-8 sm:grid-cols-4 lg:grid-cols-7">
+          {totals.map(([v, l], i) => (
+            <div key={l} className={i ? "border-l border-border pl-5" : ""}>
+              <strong className="display block text-3xl text-warm">{v}</strong>
+              <span className="text-[10px] uppercase tracking-[.13em] text-muted-foreground">{l}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="py-16">
+        <LifePulse />
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
+          <p className="max-w-xl text-sm text-muted-foreground">
+            <span className="text-foreground">Music listening and recurring transactions carried the strongest signal.</span> Streams of The Beatles and late-night listening created peak monthly density.
+          </p>
+          <Link to="/journey" className="flex items-center gap-2 text-xs font-bold uppercase tracking-[.12em]">
+            Open the journey <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+
+      <section className="py-16">
+        <div className="mb-10 flex items-end justify-between gap-6">
+          <div>
+            <p className="eyebrow">Patterns shaped into chapters</p>
+            <h2 className="display mt-3 text-5xl sm:text-6xl">Stories we found</h2>
+          </div>
+          <Link to="/stories" className="hidden text-xs uppercase tracking-[.12em] text-muted-foreground sm:block">
+            View all {stories.length}
+          </Link>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2">
+          {stories.slice(0, 4).map((s, i) => (
+            <StoryCard story={s} large={i === 0} key={s.slug} />
+          ))}
+        </div>
+      </section>
+
+      <section className="grid gap-4 border-y border-border py-14 md:grid-cols-4">
+        {[
+          ["01", "Raw Data", "Fragments arrive from three local datasets"],
+          ["02", "Insights", "Patterns begin to repeat across dates & categories"],
+          ["03", "Connections", "Moments find each other through proximity"],
+          ["04", "Story", "Evidence-based chapters take shape"]
+        ].map(([n, t, d]) => (
+          <div className="border-l border-border pl-5" key={n}>
+            <span className="text-xs text-primary">{n}</span>
+            <h3 className="display mt-5 text-3xl">{t}</h3>
+            <p className="mt-2 text-xs text-muted-foreground">{d}</p>
+          </div>
+        ))}
+      </section>
+    </div>
+  );
+}
