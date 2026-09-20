@@ -1,0 +1,11 @@
+import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
+import { Search } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+export function Button({className,variant="primary",...props}:ButtonHTMLAttributes<HTMLButtonElement>&{variant?:"primary"|"ghost"|"outline"|"icon"}){
+ const variants={primary:"bg-primary text-primary-foreground hover:brightness-110",ghost:"bg-transparent text-muted-foreground hover:bg-secondary hover:text-foreground",outline:"border border-border bg-surface text-foreground hover:border-primary/50",icon:"h-10 w-10 border border-border bg-surface text-muted-foreground hover:text-foreground"};
+ return <button className={cn("inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 text-xs font-bold uppercase tracking-[.12em] transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-40",variants[variant],className)} {...props}/>;
+}
+export function SearchField({className,...props}:InputHTMLAttributes<HTMLInputElement>){return <label className={cn("flex items-center gap-3 rounded-md border border-border bg-surface px-4 focus-within:border-primary/60",className)}><Search className="h-4 w-4 shrink-0 text-muted-foreground"/><input className="h-11 min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground" {...props}/></label>}
+export function Badge({children,tone}:{children:ReactNode;tone?:string}){return <span className={cn("inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[.12em] text-muted-foreground",tone&&`text-${tone}`)}><span className={cn("h-1.5 w-1.5 rounded-full bg-current",tone&&"category-dot")}/>{children}</span>}
+export function PageIntro({eyebrow,title,copy,aside}:{eyebrow:string;title:string;copy:string;aside?:ReactNode}){return <header className="grid gap-8 border-b border-border pb-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end"><div className="min-w-0"><p className="eyebrow mb-4">{eyebrow}</p><h1 className="display max-w-4xl text-5xl leading-[.92] text-foreground sm:text-7xl lg:text-8xl">{title}</h1><p className="mt-6 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">{copy}</p></div>{aside&&<div className="shrink-0">{aside}</div>}</header>}
